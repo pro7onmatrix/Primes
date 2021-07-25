@@ -18,9 +18,13 @@ implemented properly, even indices should never be accessed anyways).
 
 ## Run instructions
 
-(Linux): g++ -Ofast -std=c++17 -DNDEBUG -o PrimesCPP PrimesCPP.cpp && ./PrimesCPP
+```
+(Linux): g++ -Ofast -std=c++17 -DNDEBUG -o PrimesCPP_STL PrimesCPP_STL.cpp && ./PrimesCPP_STL
+```
 
 ## Output
+```
 Passes: 7818, Time: 5.000359, Avg: 0.000639596, Limit: 1000000, Count: 78498, Valid: true
 
 pro7onmatrix;7818;5.000359;1;algorithm=base,faithful=yes,bits=1
+```
