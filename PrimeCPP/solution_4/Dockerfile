@@ -5,9 +5,9 @@ RUN apt-get update -qq \
 
 COPY *.cpp /opt/app/
 WORKDIR /opt/app
-RUN g++ -Ofast -std=c++17 PrimeCPP.cpp -o PrimeCPP
+RUN g++ -Ofast -std=c++17 PrimeCPP_STL.cpp -o PrimeCPP_STL
 
 FROM ubuntu:21.04
-COPY --from=build /opt/app/PrimeCPP /usr/local/bin
+COPY --from=build /opt/app/PrimeCPP_STL /usr/local/bin
 
-ENTRYPOINT [ "PrimeCPP" ]
+ENTRYPOINT [ "PrimeCPP_STL" ]
