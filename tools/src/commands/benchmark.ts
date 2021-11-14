@@ -28,8 +28,13 @@ const ARCHITECTURES: { [arch: string]: string } = {
 export const command = new Command('benchmark')
   .requiredOption('-d, --directory <directory>', 'Implementation directory')
   .option('-f, --formatter <type>', 'Output formatter', 'table')
+  .option('-o, --output-file <file>', 'Write output to given file')
+  .option('-u, --unconfined', 'Run with seccomp:unconfined (native performance for interpreted languages)')
   .action(async (args) => {
     const directory = path.resolve(args.directory as string);
+    const unconfined = args.unconfined === true;
+
+    logger.info(`Unconfined mode: ${unconfined}`);
 
     // Making sure the outputs directory exists
     if (!fs.existsSync(directory)) {
@@ -44,6 +49,12 @@ export const command = new Command('benchmark')
       return;
     }
 
+    // Collect runtime options for docker images
+    let options: Array<string> = [];
+    if (unconfined) {
+      options.push('--security-opt seccomp=unconfined')
+    }
+
     // Determine architecture
     const architecture = ARCHITECTURES[uname().machine] || 'amd64';
     logger.info(`Detected architecture: ${architecture}`);
@@ -56,6 +67,13 @@ export const command = new Command('benchmark')
         .split(path.sep)
         .slice(-2);
       const imageName = `${implementation}_${solution}`.toLocaleLowerCase();
+
+      if (fs.existsSync(path.join(solutionDirectory, 'build-no'))) {
+        logger.warn(
+          `[${implementation}][${solution}] Skipping due to disabled build!`
+        );
+        return;
+      }
 
       // NOTE: If any arch-* files are present then check if the current architecture
       // is present among the files, if not we skip this build...
@@ -88,12 +106,12 @@ export const command = new Command('benchmark')
       let output = '';
       try {
         logger.info(`[${implementation}][${solution}] Running...`);
-        output = dockerService.runContainer(imageName);
-      } catch (e) {
+        output = dockerService.runContainer(imageName, options);
+      } catch (err) {
         logger.warn(
-          `[${implementation}][${solution}] Exited with abnormal code: ${e.status}. Results might be partial...`
+          `[${implementation}][${solution}] Exited with abnormal code: ${err.status}. Results might be partial...`
         );
-        output = e.output
+        output = err.output
           .filter((block: Buffer | null) => block !== null)
           .map((block: Buffer) => block.toString('utf8'))
           .join('');
@@ -115,5 +133,19 @@ export const command = new Command('benchmark')
     // Convert report to the correct format and print everything out.
     const report = await reportService.createReport(results);
     const formatter = FormatterFactory.getFormatter(args.formatter);
-    console.log(formatter.render(report));
+    const output = formatter.render(report);
+    console.log(output);
+
+    // If specified save output to a file on disk.
+    if (args.outputFile) {
+      const outputFile = args.outputFile as string;
+      logger.info(`Writing output to file: ${outputFile}`);
+
+      try {
+        fs.writeFileSync(outputFile, output);
+      } catch (err) {
+        logger.error(`Cannot save output: ${err}`);
+        return;
+      }
+    }
   });

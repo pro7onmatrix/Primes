@@ -7,31 +7,6 @@
 ![Bit count](https://img.shields.io/badge/Bits-8-yellowgreen)
 ![Bit count](https://img.shields.io/badge/Bits-1-green)
 
-### PrimeDart.dart
-![Algorithm](https://img.shields.io/badge/Algorithm-base-green)
-![Faithfulness](https://img.shields.io/badge/Faithful-yes-green)
-![Parallelism](https://img.shields.io/badge/Parallel-no-green)
-![Bit count](https://img.shields.io/badge/Bits-8-yellowgreen)
-
-### PrimeDartParallel.dart
-![Algorithm](https://img.shields.io/badge/Algorithm-base-green)
-![Faithfulness](https://img.shields.io/badge/Faithful-yes-green)
-![Parallelism](https://img.shields.io/badge/Parallel-yes-green)
-![Bit count](https://img.shields.io/badge/Bits-8-yellowgreen)
-
-### PrimeDartOneBit.dart
-![Algorithm](https://img.shields.io/badge/Algorithm-base-green)
-![Faithfulness](https://img.shields.io/badge/Faithful-yes-green)
-![Parallelism](https://img.shields.io/badge/Parallel-no-green)
-![Bit count](https://img.shields.io/badge/Bits-1-green)
-
-### PrimeDartParallelOneBit.dart
-![Algorithm](https://img.shields.io/badge/Algorithm-base-green)
-![Faithfulness](https://img.shields.io/badge/Faithful-yes-green)
-![Parallelism](https://img.shields.io/badge/Parallel-yes-green)
-![Bit count](https://img.shields.io/badge/Bits-1-green)
-
-
 This implementation of the Prime Sieve uses the Dart Programming Language,
 created by Google. The source file `bin/PrimeDart.dart` contains a lot of
 comments to allow someone not familiar with Dart to understand what the code is
@@ -43,11 +18,6 @@ a bit about Dart. So feel free to open that source file and take a read for
 yourself!
 
 ## Run instructions
-
-**NOTE**: Owners of an Apple Silicon Mac *must* use the Dart SDK method. The
-Docker method will not work because Google does not publish arm64 images for
-Dart, and QEMU does not like running x64 images on arm64. Not an issue with my
-code, it's a known issue with Docker/QEMU/Dart's Docker images.
 
 To run this solution, you must either have [Docker](https://www.docker.com) or
 the [Dart SDK](https://dart.dev) installed.
@@ -97,10 +67,10 @@ platform, but Dart will generate a standard ELF binary on *nix systems.
 ### Docker Results (runs all implementations)
 
 ```
-eagerestwolf&mmcdon20_8bit;4736;5.00113;1;algorithm=base,faithful=yes,bits=8
-eagerestwolf&mmcdon20_8bit_par;10888;5.001292;12;algorithm=base,faithful=yes,bits=8
-eagerestwolf&mmcdon20_1bit;3609;5.000836;1;algorithm=base,faithful=yes,bits=1
-eagerestwolf&mmcdon20_1bit_par;20329;5.000964;12;algorithm=base,faithful=yes,bits=1
+eagerestwolf&mmcdon20_8bit;4661;5.000105;1;algorithm=base,faithful=yes,bits=8
+eagerestwolf&mmcdon20_8bit_par;10710;5.001459;12;algorithm=base,faithful=yes,bits=8
+eagerestwolf&mmcdon20_1bit;4234;5.000628;1;algorithm=base,faithful=yes,bits=1
+eagerestwolf&mmcdon20_1bit_par;24644;5.001196;12;algorithm=base,faithful=yes,bits=1
 ```
 
 ### Dart SDK (running PrimeDart.dart)
